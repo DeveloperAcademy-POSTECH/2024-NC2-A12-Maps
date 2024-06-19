@@ -178,6 +178,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 }
 
-#Preview {
-    MapsView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+       MapsView()
+    }
 }
