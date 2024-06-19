@@ -10,10 +10,13 @@ import MapKit
 import CoreLocation
 
 // 커스텀 어노테이션 구조체 생성
-struct AnnotationItem: Identifiable {
+struct AnnotationItem: Identifiable, Equatable{
     let id = UUID()
     var coordinate: CLLocationCoordinate2D
     var isSpecial: Bool
+    static func == (lhs: AnnotationItem, rhs: AnnotationItem) -> Bool {
+            return lhs.id == rhs.id // 여기서는 ID가 같으면 같은 어노테이션으로 간주
+        }
 }
 
 struct MapsView: View {
@@ -47,14 +50,18 @@ struct MapsView: View {
                     Image("네잎")
                         .resizable()
                         .frame(width: 25, height: 25)
-                    //                        . scaleEffect(selectedSpecialAnnotation == annotation ? 1.2 : 1.0) // 클릭된 핀이면 크기를 키우는 애니메이션
-                    //                        .animation(.spring()) // 스프링 애니메이션 적용
-                        .animation(.interactiveSpring())
+                        .scaleEffect(selectedSpecialAnnotation == annotation ? 2.0 : 1.0)
+                        .rotationEffect(Angle(degrees: selectedSpecialAnnotation == annotation ? 10 : 0)) 
+                        .animation(.interpolatingSpring(mass: 2, stiffness: 80, damping: 10, initialVelocity: 0))
                         .onTapGesture {
-                            withAnimation{
-                                selectedSpecialAnnotation = annotation
+                                withAnimation() {
+                                    if selectedSpecialAnnotation == annotation {
+                                        selectedSpecialAnnotation = nil
+                                    } else {
+                                        selectedSpecialAnnotation = annotation
+                                    }
+                                }
                             }
-                        }
                 } else {
                     Image("세잎")
                         .resizable()
