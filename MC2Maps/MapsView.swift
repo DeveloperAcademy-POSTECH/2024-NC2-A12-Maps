@@ -95,26 +95,31 @@ struct MapsView: View {
             .sheet(item: $selectedSpecialAnnotation) { annotation in
                 VStack {
                     HStack{
-                        Text("네잎")
+                        Text("네잎클로버")
                             .font(.title)
                         Image("네잎")
                             .resizable()
                             .frame(width: 30,height: 30)
                     }
-                    Text("Latitude: \(annotation.coordinate.latitude)")
-                    Text("Longitude: \(annotation.coordinate.longitude)")
+                    Text("북: \(annotation.coordinate.latitude)")
+                    Text("동: \(annotation.coordinate.longitude)")
                     Text("오늘은 이곳에서 00만큼 머물렀습니다")
                     Button("Close") {
                         selectedSpecialAnnotation = nil
                     }
+                    Spacer()
+                    
+                    .presentationDetents([.fraction(0.1), .medium, .large])
+                    .presentationDragIndicator(.visible)
+                    .presentationBackgroundInteraction(.enabled)
+                    .interactiveDismissDisabled()
                 }
             }
     }
 
     // 어노테이션을 추가하는 함수
     func addAnnotation() {
-        //        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-        //6초 뒤에 실행
+
         guard annotations.count < maxAnnotations, let baseLocation = baseLocation else {
             return // 최대 어노테이션 수에 도달하면 추가하지 않음
         }
