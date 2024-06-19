@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		EAF2746D2C1C6B2C00D90AEA /* MC2MapsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF2746C2C1C6B2C00D90AEA /* MC2MapsApp.swift */; };
-		EAF2746F2C1C6B2C00D90AEA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF2746E2C1C6B2C00D90AEA /* ContentView.swift */; };
+		EAF2746F2C1C6B2C00D90AEA /* MapsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF2746E2C1C6B2C00D90AEA /* MapsView.swift */; };
 		EAF274712C1C6B2E00D90AEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAF274702C1C6B2E00D90AEA /* Assets.xcassets */; };
 		EAF274742C1C6B2E00D90AEA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAF274732C1C6B2E00D90AEA /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -16,7 +16,7 @@
 /* Begin PBXFileReference section */
 		EAF274692C1C6B2C00D90AEA /* MC2Maps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MC2Maps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAF2746C2C1C6B2C00D90AEA /* MC2MapsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MC2MapsApp.swift; sourceTree = "<group>"; };
-		EAF2746E2C1C6B2C00D90AEA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		EAF2746E2C1C6B2C00D90AEA /* MapsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsView.swift; sourceTree = "<group>"; };
 		EAF274702C1C6B2E00D90AEA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EAF274732C1C6B2E00D90AEA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -52,7 +52,7 @@
 			isa = PBXGroup;
 			children = (
 				EAF2746C2C1C6B2C00D90AEA /* MC2MapsApp.swift */,
-				EAF2746E2C1C6B2C00D90AEA /* ContentView.swift */,
+				EAF2746E2C1C6B2C00D90AEA /* MapsView.swift */,
 				EAF274702C1C6B2E00D90AEA /* Assets.xcassets */,
 				EAF274722C1C6B2E00D90AEA /* Preview Content */,
 			);
@@ -137,7 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EAF2746F2C1C6B2C00D90AEA /* ContentView.swift in Sources */,
+				EAF2746F2C1C6B2C00D90AEA /* MapsView.swift in Sources */,
 				EAF2746D2C1C6B2C00D90AEA /* MC2MapsApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

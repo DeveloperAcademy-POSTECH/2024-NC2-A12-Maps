@@ -11,7 +11,7 @@ import SwiftUI
 struct MC2MapsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MapsView()
         }
     }
 }
