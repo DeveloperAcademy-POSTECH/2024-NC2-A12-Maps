@@ -67,18 +67,16 @@ struct MapsView: View {
                 MapScaleView()
                 MapCompass()
                 MapPitchToggle()
+                //안됨;이유찾기
             }
             .mapStyle(.standard)
             .edgesIgnoringSafeArea(.all)
             .onAppear {
-                if let userLocation = locationManager.location/*, !isRegionSet*/ {
+                if let userLocation = locationManager.location {
                     region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
                     baseLocation = userLocation.coordinate
                 }
             }
-        //            .onChange(of: locationManager.locationManager.authorizationStatus, { oldValue, newValue in
-        //                print(newValue)
-        //            }). // 예시코드
             .onChange(of: locationManager.locationManager.authorizationStatus) { newStatus in
                 if newStatus == .authorizedWhenInUse || newStatus == .authorizedAlways {
                     if let userLocation = locationManager.location {
@@ -87,12 +85,6 @@ struct MapsView: View {
                     }
                 }
             }
-        //            .onChange(of: locationManager.location) { newLocation in
-        //                if let newLocation = newLocation {
-        ////                    region = MKCoordinateRegion(center: newLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
-        //                    baseLocation = newLocation.coordinate
-        //                }
-        //            }
             .onReceive(timer) { _ in
                 addAnnotation()
             }
