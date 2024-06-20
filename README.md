@@ -37,4 +37,7 @@ MapKit에 있는 CoreLocation을 활용하여 사용자의 위치를 파악하�
 ## 🛠️ About Code
 
 <img width="615" alt="스크린샷 2024-06-20 오후 8 57 20" src="https://github.com/DeveloperAcademy-POSTECH/2024-NC2-A12-Maps/assets/167048286/a5b999d2-1ab8-49f2-988d-2c66e3900122">
+<img width="615" alt="스크린샷 2024-06-20 오후 9 00 00" src="https://github.com/DeveloperAcademy-POSTECH/2024-NC2-A12-Maps/assets/167048286/48b208f1-25b2-448f-83f8-ec1fc66468ad">
+<img width="615" alt="스크린샷 2024-06-20 오후 9 06 27" src="https://github.com/DeveloperAcademy-POSTECH/2024-NC2-A12-Maps/assets/167048286/7d56d3f9-48e8-425b-b770-d1049787ed91">
+<img width="615" alt="스크린샷 2024-06-20 오후 9 07 33" src="https://github.com/DeveloperAcademy-POSTECH/2024-NC2-A12-Maps/assets/167048286/e8d925fa-d8a6-4d26-891a-a9ae8a290e5a">
 
