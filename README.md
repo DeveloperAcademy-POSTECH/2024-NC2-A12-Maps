@@ -6,7 +6,7 @@
 
 (추후 만들어진 유튜브 링크 추가)
 
-##💡 About Maps
+## 💡 About Maps
 
 ## What is Maps?
 
@@ -36,4 +36,5 @@ MapKit에 있는 CoreLocation을 활용하여 사용자의 위치를 파악하�
 
 ## 🛠️ About Code
 
-(핵심 코드에 대한 설명 추가)
+<img width="615" alt="스크린샷 2024-06-20 오후 8 57 20" src="https://github.com/DeveloperAcademy-POSTECH/2024-NC2-A12-Maps/assets/167048286/a5b999d2-1ab8-49f2-988d-2c66e3900122">
+
