@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 import CoreLocation
 
+
 // 커스텀 어노테이션 구조체 생성
 struct AnnotationItem: Identifiable, Equatable{
     let id = UUID()
@@ -36,8 +37,12 @@ struct MapsView: View {
     @State private var baseLocation : CLLocationCoordinate2D? // baseLocation을 현재위치로 사용
 
     @State private var specialAnnotationCounter = 0//스페셜한 어노테이션 수
-    @State private var selectedSpecialAnnotation: AnnotationItem? // 선택된 어노테이션(선택시 업데이트;sheet를 통해 모달 올리기)
+    @State private var selectedSpecialAnnotation: AnnotationItem? = nil // 선택된 어노테이션(선택시 업데이트;sheet를 통해 모달 올리기)
 
+    @State private var roadAddress: String? = nil
+     
+     let geoServiceManager = GeoServiceManager()
+    
     let maxAnnotations = 48 // 최대 어노테이션 수
     let gridSize = 6
     let cellSize = 0.0001
@@ -51,7 +56,7 @@ struct MapsView: View {
                         .resizable()
                         .frame(width: 25, height: 25)
                         .scaleEffect(selectedSpecialAnnotation == annotation ? 2.0 : 1.0)
-                        .rotationEffect(Angle(degrees: selectedSpecialAnnotation == annotation ? 10 : 0)) 
+                        .rotationEffect(Angle(degrees: selectedSpecialAnnotation == annotation ? 10 : 0))
                         .animation(.interpolatingSpring(mass: 2, stiffness: 80, damping: 10, initialVelocity: 0))
                         .onTapGesture {
                                 withAnimation() {
@@ -111,6 +116,19 @@ struct MapsView: View {
                     }
                     Text("북: \(annotation.coordinate.latitude)")
                     Text("동: \(annotation.coordinate.longitude)")
+                    // 도로명 주소 표시
+                                    if let roadAddress = roadAddress {
+                                        Text("주소: \(roadAddress)")
+                                    } else {
+                                        Text("주소를 불러오는 중...")
+                                            .onAppear {
+                                                let location = CLLocation(latitude: annotation.coordinate.latitude,
+                                                                          longitude: annotation.coordinate.longitude)
+                                                geoServiceManager.getRoadAddress(for: location) { address in
+                                                    self.roadAddress = address
+                                                }
+                                            }
+                                    }
                     Text("오늘은 이곳에서 00만큼 머물렀습니다")
                     Button("Close") {
                         selectedSpecialAnnotation = nil
@@ -175,20 +193,22 @@ struct MapsView: View {
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     var locationManager = CLLocationManager()
     @Published var location: CLLocation?
-
+    
     override init() {
         super.init()
         self.locationManager.delegate = self
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
         self.locationManager.allowsBackgroundLocationUpdates = true //백그라운드에서 동작
-
+        
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         self.location = location
     }
+    
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
