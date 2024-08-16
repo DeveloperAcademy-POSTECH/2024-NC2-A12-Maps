@@ -97,6 +97,11 @@ struct MapsView: View {
                     }
                 }
             }
+            .onChange(of: locationManager.location) { newLocation in
+                        if let userLocation = newLocation {
+                            baseLocation = userLocation.coordinate
+                        }
+                    }
             .onReceive(timer) { _ in
                 addAnnotation()
             }
