@@ -44,8 +44,6 @@ struct MapsView: View {
     @State private var hasStayedAtLocation: Bool = false // 현재 위치에서 00초 이상 머물렀는지 여부
     @State private var cloverCounts: (threeLeaf: Int, fourLeaf: Int) = (0, 0) // 세잎, 네잎 클로버 수
     
-    
-    let geoServiceManager = GeoServiceManager()
     let maxAnnotations = 48 // 최대 어노테이션 수
     let gridSize = 6
     let cellSize = 0.0001
@@ -157,30 +155,12 @@ struct MapsView: View {
                             .resizable()
                             .frame(width: 30,height: 30)
                     }
-                    Text("북: \(annotation.coordinate.latitude)")
-                    Text("동: \(annotation.coordinate.longitude)")
-                    // 도로명 주소 표시
-                    if let roadAddress = roadAddress {
-                        Text("주소: \(roadAddress)")
-                    } else {
-                        Text("주소를 불러오는 중...")
-                            .onAppear {
-                                let location = CLLocation(latitude: annotation.coordinate.latitude,
-                                                          longitude: annotation.coordinate.longitude)
-                                geoServiceManager.getRoadAddress(for: location) { address in
-                                    self.roadAddress = address
-                                }
-                            }
-                    }
-                    Text("오늘은 이곳에서 00만큼 머물렀습니다")
                     // 클로버 수 표시
                     Text("세잎 클로버: \(cloverCounts.threeLeaf)개")
                     Text("네잎 클로버: \(cloverCounts.fourLeaf)개")
                     Button("Close") {
                         selectedSpecialAnnotation = nil
                     }
-                    Spacer()
-                    
                         .presentationDetents([.fraction(0.1), .medium, .large])
                         .presentationDragIndicator(.visible)
                         .presentationBackgroundInteraction(.enabled)
