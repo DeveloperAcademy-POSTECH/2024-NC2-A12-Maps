@@ -38,6 +38,7 @@ final class GeoServiceManager: NSObject, CLLocationManagerDelegate {
             let fullAddress = "\(country)\n\(administrativeArea)\n\(locality)\n\(subLocality)\n\(subThoroughfare)"
             
             
+            
             DispatchQueue.main.async {
                 completion(fullAddress) // 주소 문자열을 반환
             }

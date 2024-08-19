@@ -146,27 +146,31 @@ struct MapsView: View {
                 checkMidnight()
             }
         //MARK: 올라오는 모달 : 네잎클로바 선택시
-            .sheet(item: $selectedSpecialAnnotation) { annotation in
-                VStack {
-                    HStack{
-                        Text("네잎클로버")
-                            .font(.title)
-                        Image("네잎")
-                            .resizable()
-                            .frame(width: 30,height: 30)
-                    }
-                    // 클로버 수 표시
-                    Text("세잎 클로버: \(cloverCounts.threeLeaf)개")
-                    Text("네잎 클로버: \(cloverCounts.fourLeaf)개")
+            .sheet(item: $selectedSpecialAnnotation) 
+        { annotation in
+            ScrollView{
+            VStack {
+                HStack {
+                    Spacer()
+                    
                     Button("Close") {
                         selectedSpecialAnnotation = nil
                     }
-                        .presentationDetents([.fraction(0.1), .medium, .large])
-                        .presentationDragIndicator(.visible)
-                        .presentationBackgroundInteraction(.enabled)
-                        .interactiveDismissDisabled()
                 }
+                .padding(.trailing, 18)
+                 //클로버 수 표시
+                Text("세잎 클로버: \(cloverCounts.threeLeaf)개")
+                Text("네잎 클로버: \(cloverCounts.fourLeaf)개")
+                    .presentationDetents([.fraction(0.1), .medium, .large])
+                    .presentationDragIndicator(.visible)
+                    .presentationBackgroundInteraction(.enabled)
+                    .interactiveDismissDisabled()
+                
             }
+            Spacer()
+        }
+            }
+ 
     }
     
     //MARK: 어노테이션을 추가하는 함수
