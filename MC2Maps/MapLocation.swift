@@ -35,7 +35,8 @@ final class GeoServiceManager: NSObject, CLLocationManagerDelegate {
             let locality = address.locality ?? ""
             let subLocality = address.subLocality ?? ""
             let subThoroughfare = address.subThoroughfare ?? ""
-            let fullAddress = "\(country) \(administrativeArea) \(locality) \(subLocality) \(subThoroughfare)"
+            let fullAddress = "\(country)\n\(administrativeArea)\n\(locality)\n\(subLocality)\n\(subThoroughfare)"
+            
             
             
             DispatchQueue.main.async {
