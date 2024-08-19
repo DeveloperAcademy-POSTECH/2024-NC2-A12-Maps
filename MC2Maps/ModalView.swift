@@ -184,13 +184,24 @@ struct ModalView: View {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location) { placemarks, error in
             if let error = error {
-                print("장소 정보를 불러오는 데 실패했습니다: \(error.localizedDescription)")
+                print("정보를 불러오는 데 실패했습니다: \(error.localizedDescription)")
                 return
             }
             
             if let placemark = placemarks?.first {
-                // 장소 이름 설정
-                self.placeName = placemark.name ?? "알 수 없는 장소"
+                // 장소 이름 설정, 장소 이름이 없으면 주소로 설정
+                if let name = placemark.name {
+                    self.placeName = name
+                } else {
+                    let thoroughfare = placemark.thoroughfare ?? ""
+                    let subThoroughfare = placemark.subThoroughfare ?? ""
+                    let locality = placemark.locality ?? ""
+                    let administrativeArea = placemark.administrativeArea ?? ""
+                    let postalCode = placemark.postalCode ?? ""
+                    
+                    // 지번 주소 조합
+                    self.placeName = "\(administrativeArea) \(locality) \(thoroughfare) \(subThoroughfare) \(postalCode)".trimmingCharacters(in: .whitespaces)
+                }
                 
                 // 장소 카테고리 설정 (areasOfInterest를 사용하거나 다른 속성 활용)
                 if let areasOfInterest = placemark.areasOfInterest, !areasOfInterest.isEmpty {
@@ -198,25 +209,21 @@ struct ModalView: View {
                 } else if let subLocality = placemark.subLocality {
                     self.placeCategory = subLocality
                 } else {
-                    self.placeCategory = "알 수 없는 장소 유형"
+                    self.placeCategory = "기타"
                 }
             }
         }
     }
-
-
     
  }
 
- struct ModalView_Previews: PreviewProvider {
-     static var previews: some View {
-         let exampleAnnotation = MKPointAnnotation()
-         exampleAnnotation.coordinate = CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)
-         
-         return ModalView(annotation: exampleAnnotation)
-     }
- }
-//#Preview {
-//    ModalView(annotation: MKPointAnnotation(), stayDuration: String())
-//}
+struct ModalView_Previews: PreviewProvider {
+    static var previews: some View {
+        let exampleAnnotation = MKPointAnnotation()
+        return ModalView(annotation: exampleAnnotation)
+    }
+}
+
+
+
 

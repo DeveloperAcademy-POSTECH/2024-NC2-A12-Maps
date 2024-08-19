@@ -150,14 +150,16 @@ struct MapsView: View {
         { annotation in
             ScrollView{
             VStack {
+                
                 HStack {
-                    Spacer()
-                    
-                    Button("Close") {
-                        selectedSpecialAnnotation = nil
+                              Spacer()
+                              Button(action: {
+                selectedSpecialAnnotation = nil })
+                              { Image(systemName: "xmark.circle.fill") .font(.system(size: 30)) .foregroundColor(Color(.systemGray4))
                     }
-                }
+                        }
                 .padding(.trailing, 18)
+                .padding(.top,16)
                  //클로버 수 표시
                 Text("세잎 클로버: \(cloverCounts.threeLeaf)개")
                 Text("네잎 클로버: \(cloverCounts.fourLeaf)개")
