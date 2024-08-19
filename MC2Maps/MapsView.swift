@@ -18,6 +18,11 @@ struct AnnotationItem: Identifiable, Equatable{
         return lhs.id == rhs.id // 여기서는 ID가 같으면 같은 어노테이션으로 간주
     }
 }
+// MARK: - 위치 기반 클로버 수 저장 구조체
+struct LocationCloverCounts {
+    let location: CLLocation
+    var cloverCounts: (threeLeaf: Int, fourLeaf: Int)
+}
 //MARK: 실제 뷰
 struct MapsView: View {
     @State private var region = MKCoordinateRegion(
@@ -42,7 +47,7 @@ struct MapsView: View {
     @State private var lastLocation: CLLocation? // 마지막 위치
     @State private var lastLocationUpdate: Date? // 마지막 위치 업데이트 시간
     @State private var hasStayedAtLocation: Bool = false // 현재 위치에서 00초 이상 머물렀는지 여부
-    @State private var cloverCounts: (threeLeaf: Int, fourLeaf: Int) = (0, 0) // 세잎, 네잎 클로버 수
+    @State private var locationCloverCounts: [LocationCloverCounts] = []
     
     
     let geoServiceManager = GeoServiceManager()
@@ -136,6 +141,8 @@ struct MapsView: View {
                         self.lastLocation = newLocation
                         self.lastLocationUpdate = Date()
                     }
+                    // 클로버 수 업데이트
+                    updateCloverCounts()
                 }
             }
             .onReceive(timer) { _ in
@@ -174,8 +181,12 @@ struct MapsView: View {
                     }
                     Text("오늘은 이곳에서 00만큼 머물렀습니다")
                     // 클로버 수 표시
-                    Text("세잎 클로버: \(cloverCounts.threeLeaf)개")
-                    Text("네잎 클로버: \(cloverCounts.fourLeaf)개")
+                    if let locationData = locationCloverCounts.first(where: { isWithinRadius(from: CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude), to: $0.location, radius: distanceThreshold) }) {
+                                        Text("세잎 클로버: \(locationData.cloverCounts.threeLeaf)개")
+                                        Text("네잎 클로버: \(locationData.cloverCounts.fourLeaf)개")
+                                    } else {
+                                        Text("클로버 수를 가져오는 중...")
+                                    }
                     Button("Close") {
                         selectedSpecialAnnotation = nil
                     }
@@ -231,14 +242,34 @@ struct MapsView: View {
             annotations.removeAll()
             // 자정을 넘으면 즉시 첫 어노테이션 추가
             addAnnotation()
-            cloverCounts = (0, 0) // 자정에 클로버 수 초기화
+            locationCloverCounts.removeAll()
         }
     }
     //MARK: 클로버 수를 업데이트하는 함수
     func updateCloverCounts() {
-        cloverCounts.threeLeaf = annotations.filter { !$0.isSpecial }.count
-        cloverCounts.fourLeaf = annotations.filter { $0.isSpecial }.count
+            guard let currentLocation = locationManager.location else { return }
+            
+            let radius = distanceThreshold
+            
+            // 현재 위치를 기준으로 반경 내 클로버 수 계산
+            let newCloverCounts = (
+                threeLeaf: annotations.filter {
+                    !$0.isSpecial && isWithinRadius(from: currentLocation, to: CLLocation(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude), radius: radius)
+                }.count,
+                fourLeaf: annotations.filter {$0.isSpecial && isWithinRadius(from: currentLocation, to: CLLocation(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude), radius: radius)
+                }.count
+                )// 현재 위치에 대한 클로버 수 업데이트 또는 새로 추가
+        if let index = locationCloverCounts.firstIndex(where: { isWithinRadius(from: currentLocation, to: $0.location, radius: radius) }) {
+            locationCloverCounts[index].cloverCounts = newCloverCounts
+        } else {
+            locationCloverCounts.append(LocationCloverCounts(location: currentLocation, cloverCounts: newCloverCounts))
+        }
     }
+    // MARK: - 거리 계산 함수
+    func isWithinRadius(from: CLLocation, to: CLLocation, radius: CLLocationDistance) -> Bool {
+        return from.distance(from: to) <= radius
+    }
+                    
 }
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
