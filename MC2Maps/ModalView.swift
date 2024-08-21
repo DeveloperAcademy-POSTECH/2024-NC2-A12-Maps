@@ -2,24 +2,21 @@ import SwiftUI
 import MapKit
 import CoreLocation
 
-//MARK: 모달 뷰
 struct ModalView: View {
-    @StateObject private var timerManager = TimerManager()
-    
-    let annotation: MKPointAnnotation // MKPointAnnotation 대신 AnnotationItem 사용
-    
-    @Binding var selectedSpecialAnnotation: AnnotationItem? // 바인딩 추가
-    
+    let annotation: MKPointAnnotation
+    @Binding var selectedSpecialAnnotation: AnnotationItem?
     @State private var roadAddress: String? = nil
-    @State private var stayDuration: String = "0시간 0분 0초"
     @State private var placeName: String? = nil
     @State private var placeCategory: String? = nil
-    @Binding var cloverCounts: (threeLeaf: Int, fourLeaf: Int) // @Binding 추가
+    @Binding var cloverCounts: (threeLeaf: Int, fourLeaf: Int)
     
-    init(annotation: MKPointAnnotation, selectedSpecialAnnotation: Binding<AnnotationItem?>, cloverCounts: Binding<(threeLeaf: Int, fourLeaf: Int)>) {
+    let elapsedTime: TimeInterval // 실시간으로 업데이트되는 경과 시간
+    
+    init(annotation: MKPointAnnotation, selectedSpecialAnnotation: Binding<AnnotationItem?>, cloverCounts: Binding<(threeLeaf: Int, fourLeaf: Int)>, elapsedTime: TimeInterval) {
         self.annotation = annotation
         self._selectedSpecialAnnotation = selectedSpecialAnnotation
         self._cloverCounts = cloverCounts
+        self.elapsedTime = elapsedTime
         
         self.items = [
             ("좌표", "북 \(annotation.coordinate.latitude)°, 동 \(annotation.coordinate.longitude)°")
@@ -29,19 +26,12 @@ struct ModalView: View {
     let items: [(String, String)]
     private let geoServiceManager = GeoServiceManager()
     
-    func cell(text: String) -> some View {
-        HStack {
-            Text(text)
-                .fontWeight(.semibold)
-        }
-    }
-    
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Button(action: {
-                    selectedSpecialAnnotation = nil // 모달 닫기
+                    selectedSpecialAnnotation = nil
                 }) {
                     Image(systemName: "xmark.circle.fill")
                         .font(.system(size: 30))
@@ -73,7 +63,7 @@ struct ModalView: View {
                 .onAppear {
                     let location = CLLocation(latitude: annotation.coordinate.latitude,
                                               longitude: annotation.coordinate.longitude)
-                    fetchPlaceName(for: location) // 함수를 여기서 호출
+                    fetchPlaceName(for: location)
                 }
                 Spacer()
             }
@@ -85,7 +75,7 @@ struct ModalView: View {
                         Image("네잎원")
                             .resizable()
                             .frame(width: 20, height: 20)
-                        Text("\(cloverCounts.fourLeaf)개") // 클로버 수 표시
+                        Text("\(cloverCounts.fourLeaf)개")
                     }
                     Spacer()
                 }
@@ -99,7 +89,7 @@ struct ModalView: View {
                         Image("세잎원")
                             .resizable()
                             .frame(width: 20, height: 20)
-                        Text("\(cloverCounts.threeLeaf)개") // 클로버 수 표시
+                        Text("\(cloverCounts.threeLeaf)개")
                     }
                     Spacer()
                 }
@@ -121,7 +111,9 @@ struct ModalView: View {
                         Text("머문시간")
                             .font(.system(size: 17))
                             .foregroundColor(Color(UIColor.systemGray2))
-                        Text(timerManager.timeString(from: timerManager.counter))
+                        
+                        // 실시간 경과 시간 표시
+                        Text(timeString(from: elapsedTime))
                             .foregroundColor(Color.green)
                     }
                 }
@@ -161,62 +153,10 @@ struct ModalView: View {
             }
             .scrollDisabled(true)
             .listSectionSpacing(22)
-            .onAppear {
-                loadStayDuration()
-            }
-            .onDisappear {
-                // 장소가 변경되거나 뷰가 사라질 때 타이머를 중지합니다.
-                timerManager.stopTimer()
-            }
         }
         .background(Color(UIColor.systemGroupedBackground))
     }
     
-    func loadStayDuration() {
-        let fileManager = FileManager.default
-        if let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let fileURL = documentDirectory.appendingPathComponent("stayDuration.txt")
-            
-            do {
-                let durationText = try String(contentsOf: fileURL, encoding: .utf8)
-                stayDuration = durationText.trimmingCharacters(in: .whitespacesAndNewlines)
-            } catch {
-                print("파일을 읽는 데 오류가 발생했습니다: \(error)")
-            }
-        }
-    }
-    
-    //    func fetchPlaceName(for location: CLLocation) {
-    //        let geocoder = CLGeocoder()
-    //        geocoder.reverseGeocodeLocation(location) { placemarks, error in
-    //            if let error = error {
-    //                print("정보를 불러오는 데 실패했습니다: \(error.localizedDescription)")
-    //                return
-    //            }
-    //
-    //            if let placemark = placemarks?.first {
-    //                if let name = placemark.name {
-    //                    self.placeName = name
-    //                } else {
-    //                    let thoroughfare = placemark.thoroughfare ?? ""
-    //                    let subThoroughfare = placemark.subThoroughfare ?? ""
-    //                    let locality = placemark.locality ?? ""
-    //                    let administrativeArea = placemark.administrativeArea ?? ""
-    //                    let postalCode = placemark.postalCode ?? ""
-    //
-    //                    self.placeName = "\(administrativeArea) \(locality) \(thoroughfare) \(subThoroughfare) \(postalCode)".trimmingCharacters(in: .whitespaces)
-    //                }
-    //
-    //                if let areasOfInterest = placemark.areasOfInterest, !areasOfInterest.isEmpty {
-    //                    self.placeCategory = areasOfInterest.first
-    //                } else if let subLocality = placemark.subLocality {
-    //                    self.placeCategory = subLocality
-    //                } else {
-    //                    self.placeCategory = "기타"
-    //                }
-    //            }
-    //        }
-    //    }
     func fetchPlaceName(for location: CLLocation) {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location) { placemarks, error in
@@ -226,10 +166,8 @@ struct ModalView: View {
             }
             
             if let placemark = placemarks?.first {
-                // 장소 이름 설정
                 self.placeName = placemark.name ?? "알 수 없는 장소"
                 
-                // 장소 카테고리 설정 (areasOfInterest를 사용하거나 다른 속성 활용)
                 if let areasOfInterest = placemark.areasOfInterest, !areasOfInterest.isEmpty {
                     self.placeCategory = areasOfInterest.first
                 } else if let subLocality = placemark.subLocality {
@@ -239,5 +177,14 @@ struct ModalView: View {
                 }
             }
         }
+    }
+    
+    // 경과 시간을 문자열로 변환하는 함수
+    func timeString(from timeInterval: TimeInterval) -> String {
+        let hours = Int(timeInterval) / 3600
+        let minutes = (Int(timeInterval) % 3600) / 60
+        let seconds = Int(timeInterval) % 60
+        
+        return String(format: "%02d시간 %02d분 %02d초", hours, minutes, seconds)
     }
 }
