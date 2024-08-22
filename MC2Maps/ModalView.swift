@@ -17,15 +17,18 @@ struct ModalView: View {
     @State private var stayDuration: String = "0시간 0분"
     @State private var placeName: String? = nil // 장소 이름을 저장
     @State private var placeCategory: String? = nil // 장소 카테고리(학교, 카페 등)를 저장
-    
+    @Binding var selectedSpecialAnnotation: AnnotationItem? // 바인딩 추가
+
     let items: [(String, String)]
     
     
     // GeoServiceManager 인스턴스 추가
     private let geoServiceManager = GeoServiceManager()
     
-    init(annotation: MKPointAnnotation) {
+    // 초기화 메서드 수정
+        init(annotation: MKPointAnnotation, selectedSpecialAnnotation: Binding<AnnotationItem?>) {
             self.annotation = annotation
+            self._selectedSpecialAnnotation = selectedSpecialAnnotation // 바인딩 초기화
             self.items = [
                 ("좌표", "북 \(annotation.coordinate.latitude)°, 동 \(annotation.coordinate.longitude)°")
             ]
@@ -41,31 +44,45 @@ struct ModalView: View {
     var body: some View {
             VStack{
                 HStack {
-                    VStack(alignment: .leading) {
-                        if let placeName = placeName {
-                            Text("\(placeName)")
-                                .font(.title)
-                                .fontWeight(.bold)
-                        } else {
-                            Text("정보를 불러오는 중...")
-                                .font(.title)
-                                .fontWeight(.bold)
-                        }
-                        
-                        if let placeCategory = placeCategory {
-                            Text("\(placeCategory)")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
+                    Spacer()
+                    Button(action: {
+                        selectedSpecialAnnotation = nil // 모달 닫기
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 30))
+                            .foregroundColor(Color(.systemGray4))
                     }
-                    .padding()
-                    .onAppear {
-                        let location = CLLocation(latitude: annotation.coordinate.latitude,
-                                                  longitude: annotation.coordinate.longitude)
-                        fetchPlaceName(for: location) // 함수를 여기서 호출
-                    }
-                Spacer()
                 }
+                    .padding(.trailing, 18)
+                    .padding(.top, 16)
+                
+                    HStack{
+                        VStack(alignment: .leading) {
+                            if let placeName = placeName {
+                                Text("\(placeName)")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                            } else {
+                                Text("정보를 불러오는 중...")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                            }
+                            
+                            if let placeCategory = placeCategory {
+                                Text("\(placeCategory)")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                        .padding()
+                        .onAppear {
+                            let location = CLLocation(latitude: annotation.coordinate.latitude,
+                                                      longitude: annotation.coordinate.longitude)
+                            fetchPlaceName(for: location) // 함수를 여기서 호출
+                        }
+                        Spacer()
+                    }
+                
                 HStack {
                     HStack {
                         Spacer()
@@ -208,14 +225,14 @@ struct ModalView: View {
     
  }
 
- struct ModalView_Previews: PreviewProvider {
-     static var previews: some View {
-         let exampleAnnotation = MKPointAnnotation()
-         exampleAnnotation.coordinate = CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)
-         
-         return ModalView(annotation: exampleAnnotation)
-     }
- }
+// struct ModalView_Previews: PreviewProvider {
+//     static var previews: some View {
+//         let exampleAnnotation = MKPointAnnotation()
+//         exampleAnnotation.coordinate = CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)
+//         
+//         return ModalView(annotation: exampleAnnotation)
+//     }
+// }
 //#Preview {
 //    ModalView(annotation: MKPointAnnotation(), stayDuration: String())
 //}
