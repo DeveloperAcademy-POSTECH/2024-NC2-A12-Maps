@@ -12,6 +12,7 @@
 		A88CEC7A2C75CA5100B4B1EF /* AnnotationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88CEC792C75CA5100B4B1EF /* AnnotationItem.swift */; };
 		A88CEC7C2C75CB1200B4B1EF /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88CEC7B2C75CB1200B4B1EF /* LocationManager.swift */; };
 		A88CEC7E2C7600B500B4B1EF /* CloverManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88CEC7D2C7600B500B4B1EF /* CloverManager.swift */; };
+		EAADC46D2C7812530099D208 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = EAADC46C2C7812530099D208 /* Localizable.xcstrings */; };
 		EAF2746D2C1C6B2C00D90AEA /* MC2MapsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF2746C2C1C6B2C00D90AEA /* MC2MapsApp.swift */; };
 		EAF2746F2C1C6B2C00D90AEA /* MapsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF2746E2C1C6B2C00D90AEA /* MapsView.swift */; };
 		EAF274712C1C6B2E00D90AEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAF274702C1C6B2E00D90AEA /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 		A88CEC792C75CA5100B4B1EF /* AnnotationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationItem.swift; sourceTree = "<group>"; };
 		A88CEC7B2C75CB1200B4B1EF /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		A88CEC7D2C7600B500B4B1EF /* CloverManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloverManager.swift; sourceTree = "<group>"; };
+		EAADC46C2C7812530099D208 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		EAF274692C1C6B2C00D90AEA /* MC2Maps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MC2Maps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAF2746C2C1C6B2C00D90AEA /* MC2MapsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MC2MapsApp.swift; sourceTree = "<group>"; };
 		EAF2746E2C1C6B2C00D90AEA /* MapsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsView.swift; sourceTree = "<group>"; };
@@ -50,6 +52,7 @@
 				A88CEC7B2C75CB1200B4B1EF /* LocationManager.swift */,
 				A88CEC792C75CA5100B4B1EF /* AnnotationItem.swift */,
 				A88329ED2C6DEBCC00D6CC87 /* MapLocation.swift */,
+				EAADC46C2C7812530099D208 /* Localizable.xcstrings */,
 				EAF2746B2C1C6B2C00D90AEA /* MC2Maps */,
 				EAF2746A2C1C6B2C00D90AEA /* Products */,
 			);
@@ -126,6 +129,9 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
+				ja,
+				fr,
 			);
 			mainGroup = EAF274602C1C6B2C00D90AEA;
 			productRefGroup = EAF2746A2C1C6B2C00D90AEA /* Products */;
@@ -143,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EAF274742C1C6B2E00D90AEA /* Preview Assets.xcassets in Resources */,
+				EAADC46D2C7812530099D208 /* Localizable.xcstrings in Resources */,
 				EAF274712C1C6B2E00D90AEA /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -294,7 +301,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2Maps/Preview Content\"";
-				DEVELOPMENT_TEAM = J75PB3W4SD;
+				DEVELOPMENT_TEAM = RQW4ABCWWT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MC2Maps/Info.plist;
@@ -326,7 +333,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MC2Maps/Preview Content\"";
-				DEVELOPMENT_TEAM = J75PB3W4SD;
+				DEVELOPMENT_TEAM = RQW4ABCWWT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MC2Maps/Info.plist;
