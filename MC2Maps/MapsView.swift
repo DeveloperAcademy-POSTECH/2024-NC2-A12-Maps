@@ -9,7 +9,7 @@ struct MapsView: View {
     )
     
     @State private var annotations: [AnnotationItem] = []
-    @State private var timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    @State private var timer = Timer.publish(every: 1800, on: .main, in: .common).autoconnect()
     @State private var midnightTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
     
     @StateObject private var locationManager = LocationManager()
@@ -31,7 +31,7 @@ struct MapsView: View {
     let maxAnnotations = 48
     let gridSize = 6
     let cellSize = 0.0001
-    let stayDuration: TimeInterval = 3
+    let stayDuration: TimeInterval = 900
     let distanceThreshold: CLLocationDistance = 75
     
     var body: some View {
@@ -66,7 +66,7 @@ struct MapsView: View {
             .mapControls {
                 MapUserLocationButton()
                 MapScaleView()
-                MapCompass()
+//                MapCompass()
                 MapPitchToggle()
             }
             .mapStyle(.standard)
